@@ -10,7 +10,7 @@ public class Program {
 
     private static string Hostname = "https://www.hackattic.com";
     private static string GetBytesPath = "/challenges/help_me_unpack/problem?access_token=";
-    private static string SubmitResultPath = "/challenges/help_me_unpack/solve?access_token=";
+    private static string SubmitResultPath = "/challenges/help_me_unpack/solve?playground=1&access_token=";
 
     public static async Task Main(string[] args){
 
@@ -70,5 +70,12 @@ public class Program {
         var verdictResponse = await httpClient.PostAsync(Hostname + SubmitResultPath + access_token, responsePayloadContent);
         var verdictJson = await verdictResponse.Content.ReadAsStringAsync();
         Console.WriteLine($"Verdict: {verdictJson}");
+
+        var verdict = JsonSerializer.Deserialize<VerdictResponse>(verdictJson);
+        Console.WriteLine($"Result: {verdict?.Result}");
+
+        if( verdict == null || verdict?.Result.Contains("passed") == false){
+            throw new Exception("WA");
+        }
     }
 }
