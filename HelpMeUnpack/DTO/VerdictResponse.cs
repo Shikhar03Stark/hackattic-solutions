@@ -5,5 +5,5 @@ namespace HelpMeUnpack.DTO;
 public class VerdictResponse
 {
     [JsonPropertyName("result")]
-    public string Result {get; set;}
+    public string? Result {get; set;}
 }

@@ -74,7 +74,7 @@ public class Program {
         var verdict = JsonSerializer.Deserialize<VerdictResponse>(verdictJson);
         Console.WriteLine($"Result: {verdict?.Result}");
 
-        if( verdict == null || verdict?.Result.Contains("passed") == false){
+        if( verdict == null || verdict.Result == null || verdict?.Result.Contains("passed") == false){
             throw new Exception("WA");
         }
     }
