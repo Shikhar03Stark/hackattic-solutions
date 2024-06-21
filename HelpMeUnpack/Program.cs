@@ -9,13 +9,18 @@ namespace HelpMeUnpack;
 public class Program {
 
     private static string Hostname = "https://www.hackattic.com";
-    private static string GetBytesPath = "/challenges/help_me_unpack/problem?access_token=83e76e14c65f7def";
-    private static string SubmitResultPath = "/challenges/help_me_unpack/solve?access_token=83e76e14c65f7def";
+    private static string GetBytesPath = "/challenges/help_me_unpack/problem?access_token=";
+    private static string SubmitResultPath = "/challenges/help_me_unpack/solve?access_token=";
 
-    public static async Task Main(){
+    public static async Task Main(string[] args){
 
+        if(args.Length < 1){
+            Console.WriteLine("Usage: dotnet run <access_token>");
+            return;
+        }
+        var access_token = args[0];
         var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync(Hostname + GetBytesPath);
+        var response = await httpClient.GetAsync(Hostname + GetBytesPath + access_token);
         var input = await response.Content.ReadFromJsonAsync<RequestPayload>();
         Console.WriteLine($"Received input: {input?.Bytes}");
 
@@ -62,7 +67,7 @@ public class Program {
         Console.WriteLine($"Response payload: {responsePayloadJson}");
 
         var responsePayloadContent = new StringContent(responsePayloadJson, Encoding.UTF8, "application/json");
-        var verdictResponse = await httpClient.PostAsync(Hostname + SubmitResultPath, responsePayloadContent);
+        var verdictResponse = await httpClient.PostAsync(Hostname + SubmitResultPath + access_token, responsePayloadContent);
         var verdictJson = await verdictResponse.Content.ReadAsStringAsync();
         Console.WriteLine($"Verdict: {verdictJson}");
     }
